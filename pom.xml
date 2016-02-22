@@ -13,9 +13,19 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <deltaspike.version>1.5.2</deltaspike.version>
+        <vaadin.version>7.5.10</vaadin.version>
     </properties>
 
     <dependencies>
+        <!-- Vaadin Spreadsheet Addon -->
+        <!-- Important: You need to have a valid license -->
+        <!-- See https://vaadin.com/directory/help/installing-cval-license for details -->
+        <dependency>
+            <groupId>com.vaadin.addon</groupId>
+            <artifactId>vaadin-spreadsheet</artifactId>
+            <version>1.1.6</version>
+        </dependency>
+
         <!-- CSV library -->
         <dependency>
             <groupId>com.opencsv</groupId>
@@ -47,20 +57,78 @@
             <version>${deltaspike.version}</version>
             <scope>runtime</scope>
         </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>org.vaadin</groupId>-->
+            <!--<artifactId>vaadin-java-ee-essentials</artifactId>-->
+            <!--<version>1.14</version>-->
+            <!--<type>pom</type>-->
+            <!--&lt;!&ndash; Removed by Martin Senne &ndash;&gt;-->
+            <!--<exclusions>-->
+                <!-- Using add-ons in this example via CDN,
+                exclude the obsolete default widgetset  -->
+                <!--<exclusion>-->
+                    <!--<groupId>com.vaadin</groupId>-->
+                    <!--<artifactId>vaadin-client-compiled</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+            <!-- End of Removed - Martin Senne -->
+        <!--</dependency>-->
+
+        <!-- Added by Martin Senne -->
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client-compiled</artifactId>
+            <version>${vaadin.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.vaadin</groupId>
-            <artifactId>vaadin-java-ee-essentials</artifactId>
-            <version>1.14</version>
-            <type>pom</type>
+            <artifactId>cdi-helpers</artifactId>
+            <version>1.12</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-cdi</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client</artifactId>
+            <version>${vaadin.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-themes</artifactId>
+            <version>${vaadin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-widgets</artifactId>
+            <version>${vaadin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client-compiler</artifactId>
+            <version>${vaadin.version}</version>
             <exclusions>
-                <!-- Using add-ons in this example via CDN, 
-                exclude the obsolete default widgetset  -->
                 <exclusion>
-                    <groupId>com.vaadin</groupId>
-                    <artifactId>vaadin-client-compiled</artifactId>
+                    <artifactId>jetty-annotations</artifactId>
+                    <groupId>org.eclipse.jetty</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jetty-servlets</artifactId>
+                    <groupId>org.eclipse.jetty</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jetty-util</artifactId>
+                    <groupId>org.eclipse.jetty</groupId>
                 </exclusion>
             </exclusions>
+
         </dependency>
+        <!-- End of Added - Martin Senne -->
+
         <dependency>
             <groupId>javax</groupId> 
             <artifactId>javaee-api</artifactId>
@@ -86,14 +154,38 @@
                 <artifactId>wildfly-maven-plugin</artifactId>
                 <version>1.0.2.Final</version>
             </plugin>
+            <!--<plugin>-->
+                <!--<groupId>com.vaadin.wscdn</groupId>-->
+                <!--<artifactId>wscdn-maven-plugin</artifactId>-->
+                <!--<version>0.0.2</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<goals>-->
+                            <!--<goal>generate</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
             <plugin>
-                <groupId>com.vaadin.wscdn</groupId>
-                <artifactId>wscdn-maven-plugin</artifactId>
-                <version>0.0.2</version>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${vaadin.version}</version>
+                <configuration>
+                    <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+                    <webappDirectory>${basedir}/target/classes/VAADIN/widgetsets</webappDirectory>
+                    <draftCompile>false</draftCompile>
+                    <compileReport>false</compileReport>
+                    <style>OBF</style>
+                    <strict>true</strict>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>generate</goal>
+                            <goal>resources</goal>
+                            <goal>update-widgetset</goal>
+                            <goal>compile-theme</goal>
+                            <goal>update-theme</goal>
+                            <goal>compile</goal>
                         </goals>
                     </execution>
                 </executions>

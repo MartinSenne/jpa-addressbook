@@ -2,10 +2,12 @@ package org.example;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.cdi.CDIUI;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.example.backend.PhoneBookService;
+import org.example.backend.SpreadsheetService;
 import org.vaadin.cdiviewmenu.ViewMenuUI;
 
 /**
@@ -19,17 +21,25 @@ import org.vaadin.cdiviewmenu.ViewMenuUI;
  * maintainability, you most likely want to use better structured UI code. E.g.
  * google for "Vaadin MVP pattern".
  */
-@CDIUI("")
-@Theme("valo")
+//@Theme("mytheme")
+
+// @Theme("valo")
+@Theme("mytheme")
 @Title("Phonebook")
+@Widgetset("org.example.MyAppWidgetset")
+@CDIUI("")
 public class VaadinUI extends ViewMenuUI {
 
     @Inject
     PhoneBookService service;
 
+//    @Inject
+//    SpreadsheetService spreadsheetService;
+
     @PostConstruct
     void init() {
         service.ensureDemoData();
+        // spreadsheetService.ensureDemoData();
     }
 
 }
