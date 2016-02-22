@@ -20,6 +20,9 @@ public class SpreadsheetEntry extends AbstractEntity {
     @NotNull(message = "Name is required")
     private String name;
 
+    // there are definity better approaches (via BlobService, etc). But as this a simple demo project and  as a matter of time ...
+    @Lob
+    @Column(length=1000000)
     private byte[] data;
 
     public SpreadsheetEntry(String name, byte[] data) {
@@ -30,7 +33,6 @@ public class SpreadsheetEntry extends AbstractEntity {
     public SpreadsheetEntry() {
         this("", new byte[0]);
     }
-
 
     public String getName() {
         return name;

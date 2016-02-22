@@ -7,6 +7,10 @@ import javax.inject.Inject;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Random;
 
@@ -68,11 +72,25 @@ public class SpreadsheetService {
 //    }
 
     public void ensureDemoData() {
-        if (getEntries(null).isEmpty()) {
 
-            em.persist(new SpreadsheetEntry("facts.xlsx", new byte[0]));
-            em.persist(new SpreadsheetEntry("revenue2016.xlsx", new byte[0]));
+        if (getEntries(null).isEmpty()) {
+            SpreadsheetEntry entry1 = new SpreadsheetEntry("Calculator.xlsx", getFileContentAsBytes("./Calculator.xlsx"));
+            SpreadsheetEntry entry2 = new SpreadsheetEntry("Demo.xlsx", getFileContentAsBytes("./Demo.xlsx"));
+
+            em.persist(entry1);
+            em.persist(entry2);
             em.flush();
+        }
+    }
+
+    private byte[] getFileContentAsBytes( String filePath ) {
+        Path path = Paths.get(filePath);
+        try {
+            byte[] data = Files.readAllBytes(path);
+            return data;
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Can not read '" + filePath + "'.");
         }
     }
 

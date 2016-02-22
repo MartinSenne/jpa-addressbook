@@ -33,13 +33,13 @@ public class VaadinUI extends ViewMenuUI {
     @Inject
     PhoneBookService service;
 
-//    @Inject
-//    SpreadsheetService spreadsheetService;
+    @Inject
+    SpreadsheetService spreadsheetService;
 
     @PostConstruct
     void init() {
         service.ensureDemoData();
-        // spreadsheetService.ensureDemoData();
+        spreadsheetService.ensureDemoData();
     }
 
 }
