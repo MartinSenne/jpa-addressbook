@@ -65,6 +65,8 @@ public class CSVImportView extends MVerticalLayout implements View {
         FileBasedUploadReceptor fileBasedUploadReceptor = new FileBasedUploadReceptor(consumeReader);
         upload.setReceiver(fileBasedUploadReceptor);
         upload.addSucceededListener(fileBasedUploadReceptor);
+        upload.setImmediate(true);
+        upload.setButtonCaption("Upload CSV.");
         
         saveButton = new Button("Save");
         saveButton.addClickListener(clickEvent -> {

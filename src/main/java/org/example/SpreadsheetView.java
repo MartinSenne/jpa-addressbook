@@ -95,6 +95,7 @@ public class SpreadsheetView extends MVerticalLayout implements View {
         maskComboboxSelectEvent = false; // prevent from firing events
 
         Consumer<FileBasedUploadReceptor.FileAndInfo> consumerFileAndInfo = fileAndInfo -> {
+            Notification.show( "'" + fileAndInfo.getFilename() + "has been uploaded successfully.");
             byte[] data = new byte[0];
             try {
                 data = Files.readAllBytes(fileAndInfo.getFile().toPath());
@@ -111,6 +112,9 @@ public class SpreadsheetView extends MVerticalLayout implements View {
         FileBasedUploadReceptor fileBasedUploadReceptor = new FileBasedUploadReceptor(consumerFileAndInfo);
         excelUpload.setReceiver(fileBasedUploadReceptor);
         excelUpload.addSucceededListener(fileBasedUploadReceptor);
+        excelUpload.setImmediate(true);
+        excelUpload.setButtonCaption("Upload Excel");
+
 
         addComponent(header);
         addComponent(comboBox);
